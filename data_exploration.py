@@ -1,15 +1,17 @@
+
 #%%
 import pandas as pd 
 import pickle 
 import networkx as nx
-import matplotlib.pyplot as plt 
+import matplotlib.pyplot as plt
+import numpy as np  
 #%%
 hash_graphe=pickle.load( open( "hash_graph.pkl", "rb" ) )
 
 # dont forget to remove duplicated lines 
 
 #%%
-l=list(hash_graphe.keys())[:100000]
+l=list(hash_graphe.keys())[:50000]
 sub_hash={}
 for j in l:
     sub_hash[j]=hash_graphe[j]
@@ -59,4 +61,31 @@ plt.ylabel("number of followers")
 plt.show()
 
 #%%
+g=g_small
+#%%
+nodes_list=list(g.nodes)
+edges_list=list(g.edges)
+missing_edges=set([])
+a=len(nodes_list)
+#%%
 
+while (len(missing_edges)<a):
+    print(len(missing_edges))
+    first, second=tuple(np.random.choice(nodes_list,2))
+    first=int(first)
+    second=int(second)
+    if first != second and (first,second) not in  edges_list and (first,second) not in  missing_edges:
+        try :
+            if nx.shortest_path_length(g,source=first,target=second) > 2 :
+                missing_edges.add((frist,second))
+            else :
+                continue
+        except:
+            missing_edges.add((first,second))
+    else:
+        continue
+
+#%%
+x,y=edges_list[0]
+print(type(x))
+nx.shortest_path_length(g,source=x,target=y)

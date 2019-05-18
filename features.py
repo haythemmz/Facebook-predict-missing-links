@@ -91,11 +91,50 @@ def shortest_path(a,b,graph):
 print(shortest_path(1,2,small_graph))
 
 #%%
-sh=-1
-while(sh ==-1):
-    a,b=np.random.choice(list(small_graph.nodes),2)
-    if a !=b:
-        sh=shortest_path(a,b,small_graph)
+def adar_index(a,b,graph):
+    x=set(graph.successors(a))
+    y=set(graph.successors(b))
+    s=0
+    try:
+        n=list(x.intersection(y))
+        if len(n) != 0 :
+            for i in n :
+                s=s+(1/math.log10(len(graph.predecessors(i))))
+            return s
+        else:
+            return 0
 
-print(a,b)
-print(sh)
+    except:
+        return 0
+
+#%%
+def follow_back(a,b,graph):
+    if graph.has_edge(b,a):
+        return 1
+    else:
+        0
+
+#%%
+centrality = nx.katz_centrality(small_graph)
+pickle.dump( centrality, open( "centrality_smallgraph.pkl", "wb" ) )
+
+#%%
+
+
+def belong_to_same_weakly_connected_components(a,b,graph):
+    wcc=list(nx.weakly_connected_components(graph))
+    if graph.has_edge(a,b):
+        return 1 
+    elif graph.has_edge(b,a):
+        return 1 
+    else:
+        for j in wcc :
+            if a in j and b in j :
+                return 1
+        return 0
+
+#%%
+def HITS_score(a):
+    pass
+h,a=nx.hits(small_graph,max_iter=1000)
+print(h,a)
