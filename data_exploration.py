@@ -94,4 +94,10 @@ nx.shortest_path_length(g,source=x,target=y)
 missing_edges=pickle.load( open( "missing_edges-35000.p", "rb" ) )
 
 #%%
-print(list(missing_edges)[:10])
+edges_dict={}
+for j in edges_list:
+    edges_dict[j]=1
+for i in missing_edges:
+    edges_dict[i]=0
+#%%
+pickle.dump( edges_dict, open( "edges_dict.pkl", "wb" ) )
