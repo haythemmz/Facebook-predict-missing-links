@@ -11,7 +11,7 @@ hash_graphe=pickle.load( open( "hash_graph.pkl", "rb" ) )
 # dont forget to remove duplicated lines 
 
 #%%
-l=list(hash_graphe.keys())[:50000]
+l=list(hash_graphe.keys())[:35000]
 sub_hash={}
 for j in l:
     sub_hash[j]=hash_graphe[j]
@@ -32,7 +32,7 @@ for k, v in sub_hash.items():
 pickle.dump( g_small, open( "graph_small.pkl", "wb" ) )
 
 #%%
-nx.info(g_small)
+print(nx.info(g_small))
 
 #%%
 sub_grah=g_small.edge_subgraph(list(g_small.edges)[0:10])
@@ -84,7 +84,7 @@ while (len(missing_edges)<a):
             missing_edges.add((first,second))
     else:
         continue
-
+pickle.dump( missing_edges, open( "missing_edges-35000.p", "wb" ) )
 #%%
 x,y=edges_list[0]
 print(type(x))
