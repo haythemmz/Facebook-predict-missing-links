@@ -4,10 +4,11 @@ import math
 import networkx as nx
 import numpy as np 
 from scipy.sparse.linalg import svds
+import pandas as pd 
 #%%
-small_graph=pickle.load(open("graph_small.pkl","rb"))
-sub_hash=pickle.load(open("sub_hash.pkl", "rb"))
-edges_dict=pickle.load(open("edges_dict.pkl", "rb"))
+small_graph=pickle.load(open("pickles/graph_small.pkl","rb"))
+sub_hash=pickle.load(open("pickles/sub_hash.pkl", "rb"))
+edges_dict=pickle.load(open("pickles/edges_dict.pkl", "rb"))
 
 #%%
 def jobcob_followee(a,b,graph):
@@ -18,7 +19,7 @@ def jobcob_followee(a,b,graph):
         if len(x)==0 or len(y)==0:
             return 0
         else:
-            jacob= len(x.intersection(y))/len(x.intersection(y))
+            jacob= len(x.intersection(y))/len(x.union(y))
             return jacob
     except:
         return 0
@@ -33,7 +34,7 @@ def jobcob_follower(a,b,graph):
         if len(x)==0 or len(y)==0:
             return 0
         else:
-            jacob= len(x.intersection(y))/len(x.intersection(y))
+            jacob= len(x.intersection(y))/len(x.union(y))
             return jacob
     except:
         return 0
@@ -66,7 +67,7 @@ def cosine_similarity_follower(a,b,graph):
         return 0
 #%%
 page_rank=nx.pagerank(small_graph)
-pickle.dump( page_rank, open( "pagerank_smallgraph.pkl", "wb" ) )
+#pickle.dump( page_rank, open( "pagerank_smallgraph.pkl", "wb" ) )
 
 #%%
 print(page_rank[max(page_rank,key=page_rank.get() )])
@@ -114,11 +115,11 @@ def follow_back(a,b,graph):
     if graph.has_edge(b,a):
         return 1
     else:
-        0
+        return 0
 
 #%%
 centrality = nx.katz_centrality(small_graph)
-pickle.dump( centrality, open( "centrality_smallgraph.pkl", "wb" ) )
+#pickle.dump( centrality, open( "centrality_smallgraph.pkl", "wb" ) )
 
 #%%
 
@@ -130,10 +131,15 @@ def belong_to_same_weakly_connected_components(a,b,graph):
     elif graph.has_edge(b,a):
         return 1 
     else:
+        w={}
         for j in wcc :
-            if a in j and b in j :
-                return 1
-        return 0
+            if a in j:
+                w={}
+                break
+        if b in w :
+             return 1 
+        else:       
+            return 0
 
 #%%
 
@@ -179,9 +185,43 @@ df['centrality_diff']=[centrality[x[0]]-centrality[x[1]] for x in df.index]
 #%%
 df['follow_back']=[follow_back(x[0],x[1],graph=small_graph) for x in df.index]
 
-belong_to_same_weakly_connected_components(a,b,graph)
+#belong_to_same_weakly_connected_components(a,b,graph)
 #%%
 
 df['belong_to_same_wcc']=[belong_to_same_weakly_connected_components(x[0],x[1],graph=small_graph) for x in df.index]
 #%%
 df.head()
+
+
+#%%
+df.shape
+
+#%%
+df['has_edges'].value_counts()
+
+#%%
+df['follow_back'].value_counts()
+
+
+#%%
+wcc=list(nx.weakly_connected_components(small_graph))
+
+#%%
+print(wcc)
+
+#%%
+a=0
+for j in range(10):
+    if j ==5 :
+        a=1
+        break 
+print(j)
+
+
+#%%
+df.head()
+
+#%%
+df.to_pickle("pickles/data.pkl")
+
+#%%
