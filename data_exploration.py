@@ -66,7 +66,7 @@ g=g_small
 nodes_list=list(g.nodes)
 edges_list=list(g.edges)
 missing_edges=set([])
-a=len(nodes_list) # change to edges_list
+a=len(edges_list) # change to edges_list
 #%%
 
 while (len(missing_edges)<a):
@@ -84,14 +84,14 @@ while (len(missing_edges)<a):
             missing_edges.add((first,second))
     else:
         continue
-pickle.dump( missing_edges, open( "missing_edges-35000.p", "wb" ) )
+pickle.dump( missing_edges, open( "missing_edges-35000_new.p", "wb" ) )
 #%%
 x,y=edges_list[0]
 print(type(x))
 nx.shortest_path_length(g,source=x,target=y)
 
 #%%
-missing_edges=pickle.load( open( "missing_edges-35000.p", "rb" ) )
+missing_edges=pickle.load( open( "missing_edges-35000_new.p", "rb" ) )
 
 #%%
 edges_dict={}

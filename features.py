@@ -3,6 +3,7 @@ import pickle
 import math 
 import networkx as nx
 import numpy as np 
+from scipy.sparse.linalg import svds
 #%%
 small_graph=pickle.load(open("graph_small.pkl","rb"))
 sub_hash=pickle.load(open("sub_hash.pkl", "rb"))
